@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}{{ warehouse.name }} - Warehouse Manager{% endblock %}
+
+{% block content %}
+<h1>{{ warehouse.name }}</h1>
+
+<!-- Statistics Cards -->
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-value">
+            {{ "%.1f"|format(warehouse.varasto.saldo) }}
+        </div>
+        <div class="stat-label">Current Balance</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">
+            {{ "%.1f"|format(warehouse.varasto.tilavuus) }}
+        </div>
+        <div class="stat-label">Total Capacity</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">
+            {{ "%.1f"|format(warehouse.varasto.paljonko_mahtuu()) }}
+        </div>
+        <div class="stat-label">Available Space</div>
+    </div>
+</div>
+
+<!-- Progress Bar / Analytics -->
+<div class="progress-container">
+    <h2>Capacity Usage</h2>
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar 
+                    {% if fill_pct >= 90 %}danger
+                    {% elif fill_pct >= 70 %}warning{% endif %}" 
+             style="width: {{ fill_pct }}%;">
+        </div>
+    </div>
+    <p class="progress-text">
+        {{ "%.1f"|format(fill_pct) }}% of capacity used
+        {% if fill_pct >= 90 %}
+            - ⚠️ Almost full!
+        {% elif fill_pct >= 70 %}
+            - ⚡ Getting full
+        {% elif fill_pct == 0 %}
+            - Empty
+        {% endif %}
+    </p>
+</div>
+
+<!-- Add Items Form -->
+<div class="card">
+    <h2 class="mb-4">Add Items</h2>
+    <form method="POST" 
+          action="{{ url_for('add_to_warehouse', warehouse_id=warehouse_id) }}" 
+          class="inline-form">
+        <div class="form-group">
+            <label for="add_amount" class="form-label">Amount to Add</label>
+            <input type="number" id="add_amount" name="amount" 
+                   class="form-input" min="0" step="0.1" 
+                   placeholder="Enter amount" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
+<!-- Remove Items Form -->
+<div class="card">
+    <h2 class="mb-4">Remove Items</h2>
+    <form method="POST" 
+          action="{{ url_for('remove_from_warehouse', 
+                   warehouse_id=warehouse_id) }}" 
+          class="inline-form">
+        <div class="form-group">
+            <label for="remove_amount" class="form-label">
+                Amount to Remove
+            </label>
+            <input type="number" id="remove_amount" name="amount" 
+                   class="form-input" min="0" step="0.1" 
+                   placeholder="Enter amount" required>
+        </div>
+        <button type="submit" class="btn btn-secondary">Remove</button>
+    </form>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">
+        ← Back to List
+    </a>
+    <a href="{{ url_for('edit_warehouse', warehouse_id=warehouse_id) }}" 
+       class="btn btn-secondary">
+        ✏️ Edit
+    </a>
+    <form method="POST" 
+          action="{{ url_for('delete_warehouse', warehouse_id=warehouse_id) }}" 
+          style="display: inline;" 
+          onsubmit="return confirm('Delete this warehouse?');">
+        <button type="submit" class="btn btn-danger">🗑️ Delete</button>
+    </form>
+</div>
+{% endblock %}

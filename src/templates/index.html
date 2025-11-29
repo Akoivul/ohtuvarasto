@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Warehouse Manager - All Warehouses{% endblock %}
+
+{% block content %}
+<h1>All Warehouses</h1>
+
+{% if warehouses %}
+    {% for id, warehouse in warehouses.items() %}
+    <div class="card">
+        <a href="{{ url_for('view_warehouse', warehouse_id=id) }}" 
+           class="card-title">
+            {{ warehouse.name }}
+        </a>
+        <p class="card-text">
+            Balance: {{ "%.1f"|format(warehouse.varasto.saldo) }} / 
+            {{ "%.1f"|format(warehouse.varasto.tilavuus) }} 
+            ({{ "%.0f"|format(warehouse.fill_pct) }}% full)
+        </p>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <div class="empty-state">
+            <p>No warehouses yet. Create your first warehouse to get started!</p>
+            <a href="{{ url_for('create_warehouse') }}" 
+               class="btn btn-primary mt-4">
+                + Create Warehouse
+            </a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
