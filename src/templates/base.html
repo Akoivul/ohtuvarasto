@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Warehouse Manager{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+                         'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #e6edf3;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 16px 0;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            color: #f0f6fc;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #f0f6fc;
+            margin-bottom: 24px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        h2 {
+            color: #f0f6fc;
+            margin-bottom: 16px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid;
+            transition: 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: #238636;
+            border-color: #238636;
+            color: #ffffff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2ea043;
+            border-color: #2ea043;
+        }
+        
+        .btn-secondary {
+            background-color: #21262d;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
+        
+        .btn-danger {
+            background-color: #21262d;
+            border-color: #f85149;
+            color: #f85149;
+        }
+        
+        .btn-danger:hover {
+            background-color: #da3633;
+            border-color: #da3633;
+            color: #ffffff;
+        }
+        
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        
+        .card-title {
+            color: #58a6ff;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .card-title:hover {
+            text-decoration: underline;
+        }
+        
+        .card-text {
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            color: #e6edf3;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e6edf3;
+        }
+        
+        .form-input:focus {
+            border-color: #58a6ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+        
+        .inline-form {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            margin-bottom: 16px;
+        }
+        
+        .inline-form .form-group {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .empty-state {
+            padding: 48px;
+            color: #8b949e;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #8b949e;
+            margin-top: 4px;
+        }
+        
+        .progress-container {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar-wrapper {
+            background-color: #21262d;
+            border-radius: 6px;
+            height: 24px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #238636, #3fb950);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-bar.warning {
+            background: linear-gradient(90deg, #9e6a03, #d29922);
+        }
+        
+        .progress-bar.danger {
+            background: linear-gradient(90deg, #da3633, #f85149);
+        }
+        
+        .progress-text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        
+        .mt-4 {
+            margin-top: 24px;
+        }
+        
+        .mb-4 {
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="{{ url_for('index') }}" class="logo">
+                📦 Warehouse Manager
+            </a>
+            <a href="{{ url_for('create_warehouse') }}" class="btn btn-primary">
+                + New Warehouse
+            </a>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
