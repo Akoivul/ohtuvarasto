@@ -47,7 +47,7 @@ def view_warehouse(warehouse_id):
 def create_warehouse():
     if request.method == 'POST':
         name = request.form.get('name', 'Unnamed')
-        capacity = float(request.form.get('capacity', 100))
+        capacity = float(request.form.get('capacity', 200))
         initial_balance = float(request.form.get('initial_balance', 0))
         warehouse_id = get_next_id()
         warehouses[warehouse_id] = {
