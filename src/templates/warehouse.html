@@ -30,23 +30,20 @@
 <!-- Progress Bar / Analytics -->
 <div class="progress-container">
     <h2>Capacity Usage</h2>
-    {% set fill_percentage = warehouse.varasto.saldo / 
-       warehouse.varasto.tilavuus * 100 
-       if warehouse.varasto.tilavuus > 0 else 0 %}
     <div class="progress-bar-wrapper">
         <div class="progress-bar 
-                    {% if fill_percentage >= 90 %}danger
-                    {% elif fill_percentage >= 70 %}warning{% endif %}" 
-             style="width: {{ fill_percentage }}%;">
+                    {% if fill_pct >= 90 %}danger
+                    {% elif fill_pct >= 70 %}warning{% endif %}" 
+             style="width: {{ fill_pct }}%;">
         </div>
     </div>
     <p class="progress-text">
-        {{ "%.1f"|format(fill_percentage) }}% of capacity used
-        {% if fill_percentage >= 90 %}
+        {{ "%.1f"|format(fill_pct) }}% of capacity used
+        {% if fill_pct >= 90 %}
             - ⚠️ Almost full!
-        {% elif fill_percentage >= 70 %}
+        {% elif fill_pct >= 70 %}
             - ⚡ Getting full
-        {% elif fill_percentage == 0 %}
+        {% elif fill_pct == 0 %}
             - Empty
         {% endif %}
     </p>

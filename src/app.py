@@ -13,9 +13,22 @@ def get_next_id():
     return warehouse_id_counter[0]
 
 
+def get_fill_percentage(varasto):
+    if varasto.tilavuus > 0:
+        return varasto.saldo / varasto.tilavuus * 100
+    return 0
+
+
 @app.route('/')
 def index():
-    return render_template('index.html', warehouses=warehouses)
+    warehouse_data = {}
+    for wid, wh in warehouses.items():
+        warehouse_data[wid] = {
+            'name': wh['name'],
+            'varasto': wh['varasto'],
+            'fill_pct': get_fill_percentage(wh['varasto'])
+        }
+    return render_template('index.html', warehouses=warehouse_data)
 
 
 @app.route('/warehouse/<int:warehouse_id>')
@@ -23,9 +36,11 @@ def view_warehouse(warehouse_id):
     if warehouse_id not in warehouses:
         return redirect(url_for('index'))
     warehouse = warehouses[warehouse_id]
+    fill_pct = get_fill_percentage(warehouse['varasto'])
     return render_template('warehouse.html',
                            warehouse=warehouse,
-                           warehouse_id=warehouse_id)
+                           warehouse_id=warehouse_id,
+                           fill_pct=fill_pct)
 
 
 @app.route('/create', methods=['GET', 'POST'])
@@ -87,4 +102,4 @@ def delete_warehouse(warehouse_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
